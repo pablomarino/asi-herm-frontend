@@ -6,9 +6,6 @@ Frontend del proyecto propuesto en la asignatura de ASI, en este [enlace](https:
 
 ## Primeros pasos
 
-- Instale Deno en su sistema: <https://docs.deno.com/runtime/manual/getting_started/installation>
-
-
 ```bash
 # Incluir acciones a realizar
 ```
