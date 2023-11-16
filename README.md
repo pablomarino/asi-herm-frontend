@@ -7,11 +7,11 @@ Frontend del proyecto propuesto en la asignatura de ASI, en este [enlace](https:
 ## Primeros pasos
 
 ```bash
-# Incluir acciones a realizar
+# Incluir acciones para preparar el entorno del proyecto
 ```
 
 ## Ejecución del proyecto
 
 ```bash
-# Incluir acciones a realizar para levantar el backend
+# Incluir acciones a realizar ejecutar el proyecto
 ```
