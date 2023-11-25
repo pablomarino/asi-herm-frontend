@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.flexbox-align {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top:1vw;
+
+  width: 100%;
+}
+.lightButton{
+	background: var(--fallback-bc,oklch(var(--bc)/1));
+	color: var(--fallback-b1,oklch(var(--b1)/1));
+}
+
+.lightButton:hover{
+    background-color:color-mix( in oklab,var(--fallback-bc,oklch(var(--bc)/1)) 50%, black );
+	color: var(--fallback-bc,oklch(var(--bc)/1));
+}
+
+.trSelect:hover{
+    background-color:color-mix( in oklab,var(--fallback-bc,oklch(var(--bc)/1)) 50%, black );
+	color: var(--fallback-bc,oklch(var(--bc)/1));
+	transition: 0.1s;
+}
+
+.hr{
+	color: var(--fallback-bc,oklch(var(--bc)/1));
+	border-color: var(--fallback-bc,oklch(var(--bc)/1));
+}
