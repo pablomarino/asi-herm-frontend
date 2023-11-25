@@ -1,40 +1,46 @@
+// FIXME: Save button is not working
+// TODO: Add validation to the form
+// TODO: Add a cancel button that redirects to the orders list
+// TODO: Load the order data if in edit mode
+// TODO: Group same Items together
+// TODO: remove Items with 0 quantity
 <template>
   <v-container>
     <h1 class="text-center text-5xl p-10">Order Form</h1>
     <div class="flex items-center justify-center pt-5">
-      <div class="card card-side bg-base-100 shadow-xl p-10">
+      <div class="bg-base-200 shadow-xl p-10">
         <form @submit.prevent="submitForm">
           <p class="text-2xl pb-4">Order:</p>
-          <div>
-            <label for="reference">Reference:</label>
-            <input type="number" v-model="reference" required />
+          <div class="flex justify-between pb-2">
+            <label class="mr-10" for="reference">Reference:</label>
+            <input class="w-30 text-right" type="number" min="0" v-model="reference" required />
           </div>
 
-          <div>
-            <label for="date">Date:</label>
-            <input type="date" v-model="date" required />
+          <div class="flex justify-between  pb-2">
+            <label class="mr-10" for="date">Date:</label>
+            <input class="w-100" type="date" v-model="date" required />
           </div>
-
-          <div>
-            <label for="state">State:</label>
-            <input disabled type="text" v-model="state" readonly />
+          
+          <div class="flex justify-between  pb-2">
+            <label class="mr-10" for="state">State:</label>
+            <input class="w-30 text-right" disabled type="text" v-model="state" readonly />
           </div>
-
-          <p class="text-2xl pt-4">Items:</p>
+          
+          <p class="text-2xl pt-4 pb-4">Items:</p>
 
           <ul>
-            <li v-for="(item, index) in items" :key="index">
+            <li  class="flex justify-between pb-4" v-for="(item, index) in items" :key="index">
               <div>
-                <label for="itemReference">Item Reference:</label>
-                <input type="number" v-model="itemReference" required />
+                <label class="mr-4" for="itemReference">Item Reference:</label>
+                <input class="w-10 mr-6" type="number"  min="0" v-model="item.itemReference" required />
               </div>
 
               <div>
-                <label for="numberItems">Number of Items:</label>
-                <input type="number" v-model="numberItems" required />
+                <label class="mr-4"  for="numberItems">Number of Items:</label>
+                <input  class="w-10 mr-6" type="number"  min="0" v-model="item.numberItems" required />
               </div>
 
-              <button class="btn btn-sm" @click="removeItem(index)">
+              <button class="btn btn-xs btn-error" @click="removeItem(index)">
                 Remove Item
               </button>
             </li>
@@ -42,7 +48,7 @@
 
           <ul class="flex justify-end">
             <li>
-              <button type="button" class="btn btn-sm" @click="addItem">
+              <button type="button" class="btn btn-sm btn-success" @click="addItem()">
                 Add Item
               </button>
             </li>
@@ -51,6 +57,7 @@
           <div class="flex justify-end">
             <button class="btn btn-primary mt-10" type="submit">Submit</button>
           </div>
+
         </form>
       </div>
     </div>
@@ -58,42 +65,63 @@
 </template>
 
 <script>
+import OrdersRepository from "@/repositories/OrdersRepository";
+
 export default {
   data() {
     return {
       reference: 0,
       date: "",
-      state: "pending",
+      state: "PENDING",
       itemReference: 0,
       numberItems: 0,
       items: [],
+      isEditMode: false, // Flag to determine if in edit mode
     };
+  },
+  beforeRouteEnter(to, from, next) {
+    // Determine if the route is for editing or creating a new order
+    const isEditMode = to.name === 'Order Form' && to.params.id !== undefined;
+    next(vm => {
+      // Pass the isEditMode flag to the component instance
+      vm.isEditMode = isEditMode;
+    });
+  },
+  created() {
+    this.date = new Date().toISOString().substr(0, 10);
+    this.items = [{ itemReference: 0, numberItems: 0}];
   },
   methods: {
     addItem() {
-      if (this.itemReference && this.numberItems) {
-        this.items.push({
-          itemReference: this.itemReference,
-          numberItems: this.numberItems,
-        });
-
-        // Clear input fields after adding an item
-        this.itemReference = 0;
-        this.numberItems = 0;
-      }
+     this.items.push({ itemReference: 0, numberItems: 0})
     },
     removeItem(index) {
-      this.items.splice(index, 1);
+      console.log(index);
+      if(this.items.length > 1){
+      this.items.splice(index, 1);}
     },
-    submitForm() {
-      // You can perform additional actions here before submitting the form
-      console.log("Form submitted!");
-      console.log("Form data:", {
+    async submitForm() {
+      const entity = {
         reference: this.reference,
         date: this.date,
         state: this.state,
         items: this.items,
-      });
+      };
+      console.log("Form submitted!");
+      console.log("Form data:", entity);
+      
+      try {
+      const result = await OrdersRepository.save(entity);
+      // If save is successful, do something with the result
+      console.log("Save successful:", result);
+      // Call another method or update the state as needed
+      
+    } catch (error) {
+      // If there's an error, alert it
+      console.error("Save failed:", error);
+      alert("Save failed. Please try again.");
+      
+    }
     },
   },
 };
