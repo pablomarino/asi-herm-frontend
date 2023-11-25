@@ -15,7 +15,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item) in items" :key="item._id" @click="handleClick(item.reference)">
+              <tr class="trSelect" v-for="(item) in items" :key="item._id" @click="handleClick(item.reference)">
                 <td>{{ item.name }}</td>
                 <td>{{ item.reference }}</td>
                 <td>{{ item.description }}</td>
