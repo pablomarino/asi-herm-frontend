@@ -70,79 +70,86 @@ import OrdersRepository from "@/repositories/OrdersRepository";
 export default {
   data() {
     return {
+      id: "",
       reference: 0,
       date: "",
       state: "PENDING",
       itemReference: "0",
       numberItems: 0,
       items: [],
-      isEditMode: false, // Flag to determine if in edit mode
+      isEditMode: null, // Flag to determine if in edit mode4
     };
   },
+  
   beforeRouteEnter(to, from, next) {
     // Determine if the route is for editing or creating a new order
-    const isEditMode = to.name === "Order Form" && to.params.id !== undefined;
+    const isEditMode = to.name === "Edit Order Form" && to.params.id !== undefined;
+    
     next((vm) => {
       // Pass the isEditMode flag to the component instance
       vm.isEditMode = isEditMode;
+      console.log("isEditMode_before_route: " + isEditMode+" "+vm.isEditMode);
     });
   },
+
   created() {
-    this.date = new Date().toISOString().substr(0, 10);
+    console.log("isEditMode_created: " + this.isEditMode);
     if (this.isEditMode) {
       this.getOrder();
-    }else{
+    } else {
+      this.id = "";
+      this.date = new Date().toISOString().substr(0, 10);
       this.items = [{ itemReference: "0", numberItems: 0 }];
     }
-  }, 
+  },
+  
   methods: {
     addItem() {
       this.items.push({ itemReference: "0", numberItems: 0 });
     },
     removeItem(index) {
-      console.log(index);
       if (this.items.length > 1) {
         this.items.splice(index, 1);
       }
     }, backToOrders() {
       this.$router.push("/orders/");
     },
-  }, getOrder() {
+  }, async getOrder() {
     OrdersRepository.getOne(this.$route.params.id)
       .then((response) => {
+        this.id = response.data.id;
         this.reference = response.data.reference;
         this.date = response.data.date;
         this.state = response.data.state;
         this.items = response.data.items;
+        console.log("---------------" + response.data);
       })
       .catch((error) => {
         console.log(error);
       });
   },
-    async submitForm() {
-      const entity = JSON.stringify({
-        id: "",
-        reference: this.reference,
-        date: this.date,
-        state: "DONE", //this.state,
-        items: this.items,//JSON.stringify(this.items).split("\\").join(""), //
+  async submitForm() {
+    const entity = JSON.stringify({
+      id: this.id,
+      reference: this.reference,
+      date: this.date,
+      state: "DONE", //this.state,
+      items: this.items,//JSON.stringify(this.items).split("\\").join(""), //
+    }).split("\\").join("");
+    console.log("Form data:", entity);
 
-      }).split("\\").join("");
-      console.log("Form submitted!");
-      console.log("Form data:", entity);
-
-      try {
-        const result = await OrdersRepository.save(entity);
-        // If save is successful, do something with the result
-        alert("Order #" + this.reference + " saved successfully. ");
-        console.log("Save successful:", result);
-        this.backToOrders();
-        // Call another method or update the state as needed
-      } catch (error) {
-        // If there's an error, alert it
-        console.error("Save failed:", error);
-        alert("Save failed. Please try again.");
-      }
-    },
+    try {
+      const result = await OrdersRepository.save(entity);
+      // If save is successful, do something with the result
+      alert("Order #" + this.reference + " saved successfully. ");
+      console.log("Save successful:", result);
+      this.backToOrders();
+      // Call another method or update the state as needed
+    } catch (error) {
+      // If there's an error, alert it
+      console.error("Save failed:", error);
+      alert("Save failed. Please try again.");
+    }
+  },
 };
 </script>
