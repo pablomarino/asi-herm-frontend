@@ -1,9 +1,7 @@
-// FIXME: Save button is not working
-// TODO: Add validation to the form
-// TODO: Add a cancel button that redirects to the orders list
+// TODO: Add validation to the form 
 // TODO: Load the order data if in edit mode
-// TODO: Group same Items together
 // TODO: remove Items with 0 quantity
+// FIXME: Error saving ITEMS
 <template>
   <v-container>
     <h1 class="text-center text-5xl p-10">Order Form</h1>
@@ -16,28 +14,28 @@
             <input class="w-30 text-right" type="number" min="0" v-model="reference" required />
           </div>
 
-          <div class="flex justify-between  pb-2">
+          <div class="flex justify-between pb-2">
             <label class="mr-10" for="date">Date:</label>
             <input class="w-100" type="date" v-model="date" required />
           </div>
-          
-          <div class="flex justify-between  pb-2">
+
+          <div class="flex justify-between pb-2">
             <label class="mr-10" for="state">State:</label>
             <input class="w-30 text-right" disabled type="text" v-model="state" readonly />
           </div>
-          
+
           <p class="text-2xl pt-4 pb-4">Items:</p>
 
-          <ul>
-            <li  class="flex justify-between pb-4" v-for="(item, index) in items" :key="index">
+          <ul class="table-zebra">
+            <li class="flex justify-between pb-4" v-for="(item, index) in items" :key="index">
               <div>
                 <label class="mr-4" for="itemReference">Item Reference:</label>
-                <input class="w-10 mr-6" type="number"  min="0" v-model="item.itemReference" required />
+                <input class="w-10 mr-6" type="number" min="0" v-model="item.itemReference" required />
               </div>
 
               <div>
-                <label class="mr-4"  for="numberItems">Number of Items:</label>
-                <input  class="w-10 mr-6" type="number"  min="0" v-model="item.numberItems" required />
+                <label class="mr-4" for="numberItems">Number of Items:</label>
+                <input class="w-10 mr-6" type="number" min="0" v-model="item.numberItems" required />
               </div>
 
               <button class="btn btn-xs btn-error" @click="removeItem(index)">
@@ -54,10 +52,12 @@
             </li>
           </ul>
 
-          <div class="flex justify-end">
+          <div class="flex justify-between">
+            <button class="btn btn-primary mt-10" type="button" @click="backToOrders()">
+              Cancel
+            </button>
             <button class="btn btn-primary mt-10" type="submit">Submit</button>
           </div>
-
         </form>
       </div>
     </div>
@@ -73,7 +73,7 @@ export default {
       reference: 0,
       date: "",
       state: "PENDING",
-      itemReference: 0,
+      itemReference: "0",
       numberItems: 0,
       items: [],
       isEditMode: false, // Flag to determine if in edit mode
@@ -81,48 +81,68 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     // Determine if the route is for editing or creating a new order
-    const isEditMode = to.name === 'Order Form' && to.params.id !== undefined;
-    next(vm => {
+    const isEditMode = to.name === "Order Form" && to.params.id !== undefined;
+    next((vm) => {
       // Pass the isEditMode flag to the component instance
       vm.isEditMode = isEditMode;
     });
   },
   created() {
     this.date = new Date().toISOString().substr(0, 10);
-    this.items = [{ itemReference: 0, numberItems: 0}];
-  },
+    if (this.isEditMode) {
+      this.getOrder();
+    }else{
+      this.items = [{ itemReference: "0", numberItems: 0 }];
+    }
+  }, 
   methods: {
     addItem() {
-     this.items.push({ itemReference: 0, numberItems: 0})
+      this.items.push({ itemReference: "0", numberItems: 0 });
     },
     removeItem(index) {
       console.log(index);
-      if(this.items.length > 1){
-      this.items.splice(index, 1);}
+      if (this.items.length > 1) {
+        this.items.splice(index, 1);
+      }
+    }, backToOrders() {
+      this.$router.push("/orders/");
     },
+  }, getOrder() {
+    OrdersRepository.getOne(this.$route.params.id)
+      .then((response) => {
+        this.reference = response.data.reference;
+        this.date = response.data.date;
+        this.state = response.data.state;
+        this.items = response.data.items;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
     async submitForm() {
-      const entity = {
+      const entity = JSON.stringify({
+        id: "",
         reference: this.reference,
         date: this.date,
-        state: this.state,
-        items: this.items,
-      };
+        state: "DONE", //this.state,
+        items: this.items,//JSON.stringify(this.items).split("\\").join(""), //
+
+      }).split("\\").join("");
       console.log("Form submitted!");
       console.log("Form data:", entity);
-      
+
       try {
-      const result = await OrdersRepository.save(entity);
-      // If save is successful, do something with the result
-      console.log("Save successful:", result);
-      // Call another method or update the state as needed
-      
-    } catch (error) {
-      // If there's an error, alert it
-      console.error("Save failed:", error);
-      alert("Save failed. Please try again.");
-      
-    }
+        const result = await OrdersRepository.save(entity);
+        // If save is successful, do something with the result
+        alert("Order #" + this.reference + " saved successfully. ");
+        console.log("Save successful:", result);
+        this.backToOrders();
+        // Call another method or update the state as needed
+      } catch (error) {
+        // If there's an error, alert it
+        console.error("Save failed:", error);
+        alert("Save failed. Please try again.");
+      }
     },
-  },
 };
 </script>
