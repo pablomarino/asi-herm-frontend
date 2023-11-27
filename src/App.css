@@ -16,17 +16,14 @@
 }
 
 .lightButton:hover{
-    background-color:color-mix( in oklab,var(--fallback-bc,oklch(var(--bc)/1)) 50%, black );
-	color: var(--fallback-bc,oklch(var(--bc)/1));
+    background-color:color-mix( in oklab,var(--fallback-bc,oklch(var(--bc)/1)) 80%, var(--fallback-b1,oklch(var(--b1)/1)));
 }
 
 .trSelect:hover{
-    background-color:color-mix( in oklab,var(--fallback-bc,oklch(var(--bc)/1)) 50%, black );
-	color: var(--fallback-bc,oklch(var(--bc)/1));
+    background-color:color-mix( in oklab,var(--fallback-bc,oklch(var(--bc)/1)) 20%, var(--fallback-b1,oklch(var(--b1)/1)));
 	transition: 0.1s;
 }
 
 .hr{
-	color: var(--fallback-bc,oklch(var(--bc)/1));
 	border-color: var(--fallback-bc,oklch(var(--bc)/1));
 }
