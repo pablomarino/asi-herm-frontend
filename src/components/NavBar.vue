@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="navbar-end">
-      <a class="btn btn-ghost text-xl" href="">Hermenegildo e hijos, S.L</a>
+      <a class="btn btn-ghost text-xl" href="/">Hermenegildo e hijos, S.L</a>
     </div>
   </div>
 </template>
