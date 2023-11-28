@@ -115,11 +115,10 @@ export default {
     getItems(id) {
       this.loading = true;
       return ItemsRepository.get(id)
-          .then((response) => (this.item = response.data))
-          .finally(() => {
-            console.log(this.item);
-            this.getBoxes();
-          });
+        .then((response) => (this.item = response.data))
+        .finally(() => {
+          this.getBoxes();
+        });
     },
     getBoxes() {
       this.loading = true;
@@ -127,9 +126,8 @@ export default {
         referenceItem: this.item.id,
       }
       return BoxesRepository.getAll(options)
-          .then((response) => (this.boxes = response.data))
-          .finally(() =>
-              (this.loading = false));
+        .then((response) => (this.boxes = response.data))
+        .finally(() => (this.loading = false));
     },
     edit() {
       this.$router.push({

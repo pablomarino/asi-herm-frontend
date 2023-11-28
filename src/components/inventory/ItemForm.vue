@@ -19,7 +19,7 @@
           <h2 style="font-weight: bold; margin-top: 15px">Descripción</h2>
         </div>
         <div class="column">
-          <input type="text" v-model="item.description" class="input input-bordered w-full max-w-xs" />
+          <textarea class="textarea textarea-bordered w-full max-w-xs" v-model="item.description"></textarea>
         </div>
       </div>
 
@@ -79,17 +79,16 @@ export default {
     async save() {
       if (this.$route.params.id) {
         this.loading = true;
-        console.log(this.item);
         ItemsRepository.save(this.item)
-            .then(() =>
-                this.$router.push({
-                  name: "Inventory Detail",
-                  params: {
-                    id: this.item.reference
-                  },
-                })
-            )
-            .finally(() => (this.loading = false));
+          .then(() =>
+            this.$router.push({
+              name: "Inventory Detail",
+              params: {
+                id: this.item.reference
+              },
+            })
+          )
+          .finally(() => (this.loading = false));
       }
     },
   }
