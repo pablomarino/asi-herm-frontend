@@ -1,57 +1,60 @@
 <template>
-    <div class="card" v-if="!loading">
-      <div class="card-body">
-        <h2 class="card-title">Pieza con número de referencia {{ item.reference }}</h2>
+  <div class="card" v-if="!loading">
+    <div class="card-body">
+      <h2 class="card-title">Pieza con número de referencia {{ item.reference }}</h2>
 
-        <div class="divider"/>
+      <div class="divider"/>
 
-        <div class="row">
-          <div class="column">
-            <h2 style="font-weight: bold">Nombre pieza</h2>
-          </div>
-          <div class="column">
-            <p>{{ item.name }}</p>
-          </div>
+      <div class="row">
+        <div class="column">
+          <h2 style="font-weight: bold">Nombre pieza</h2>
         </div>
-
-        <div class="row">
-          <div class="column">
-            <h2 style="font-weight: bold">Descripción</h2>
-          </div>
-          <div class="column">
-            <p>{{ item.description }}</p>
-          </div>
+        <div class="column">
+          <p>{{ item.name }}</p>
         </div>
+      </div>
 
-        <div class="row">
-          <div class="column">
-            <h2 style="font-weight: bold">Número total de piezas</h2>
-          </div>
-          <div class="column">
-            <p>{{ item.numTotalItems }}</p>
-          </div>
+      <div class="row">
+        <div class="column">
+          <h2 style="font-weight: bold">Descripción</h2>
         </div>
-
-        <div class="row">
-          <div class="column">
-            <h2 style="font-weight: bold">Precio de compra</h2>
-          </div>
-          <div class="column">
-            <p>{{ item.purchasePrice }} €</p>
-          </div>
+        <div class="column">
+          <p>{{ item.description }}</p>
         </div>
+      </div>
 
-        <div class="row">
-          <div class="column">
-            <h2 style="font-weight: bold">Precio de venta</h2>
-          </div>
-          <div class="column">
-            <p>{{ item.salePrice }} €</p>
-          </div>
+      <div class="row">
+        <div class="column">
+          <h2 style="font-weight: bold">Número total de piezas</h2>
         </div>
+        <div class="column">
+          <p>{{ item.numTotalItems }}</p>
+        </div>
+      </div>
 
+      <div class="row">
+        <div class="column">
+          <h2 style="font-weight: bold">Precio de compra</h2>
+        </div>
+        <div class="column">
+          <p>{{ item.purchasePrice }} €</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="column">
+          <h2 style="font-weight: bold">Precio de venta</h2>
+        </div>
+        <div class="column">
+          <p>{{ item.salePrice }} €</p>
+        </div>
+      </div>
+
+      <div class="card-actions justify-end">
+        <button class="btn btn-outline flex items-center" @click="edit">Edit</button>
       </div>
     </div>
+  </div>
 
   <div class="card" v-if="!loading">
     <div class="card-body">
@@ -114,6 +117,7 @@ export default {
       return ItemsRepository.get(id)
           .then((response) => (this.item = response.data))
           .finally(() => {
+            console.log(this.item);
             this.getBoxes();
           });
     },
@@ -126,7 +130,13 @@ export default {
           .then((response) => (this.boxes = response.data))
           .finally(() =>
               (this.loading = false));
-    }
+    },
+    edit() {
+      this.$router.push({
+        name: "Edit Item Form",
+        params: { id: this.item.reference },
+      });
+    },
   }
 }
 </script>

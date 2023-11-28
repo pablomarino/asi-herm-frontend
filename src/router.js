@@ -6,6 +6,7 @@ import OrderForm from "@/components/orders/OrderForm.vue";
 import OrderList from "@/components/orders/OrderList.vue";
 import OrderDetail from "@/components/orders/OrderDetail.vue";
 
+import ItemForm from "@/components/inventory/ItemForm.vue";
 import InventoryList from "@/components/inventory/InventoryList.vue";
 import ItemDetail from "@/components/inventory/ItemDetail.vue";
 
@@ -50,6 +51,11 @@ const routes = [
         path: "/items/:id(\\d+)",
         name: "Inventory Detail",
         component: ItemDetail,
+    },
+    {
+        path: "/items/:id/edit",
+        name: "Edit Item Form",
+        component: ItemForm,
     },
 ];
 
