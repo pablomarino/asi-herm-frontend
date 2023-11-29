@@ -1,54 +1,97 @@
 // FIXME: Update order not working
 <template>
   <v-container>
+    <!-- Modal -->
+    <dialog ref="order_modal" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">{{ modal_title }}</h3>
+        <p class="py-4">{{ modal_content }}</p>
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn">Close</button>
+          </form>
+        </div>
+      </div>
+    </dialog>
+
+
+    <!-- FORM -->
     <h1 class="text-center text-5xl p-10">Order {{ this.$route.params.id  }} Form</h1>
-    <div class="flex items-center justify-center pt-5">
+    <div class="mx-20 pt-5">
       <div class="bg-base-200 shadow-xl p-10">
-        <form @submit.prevent="submitForm">
-          <p class="text-2xl pb-4">Order:</p>
+        <form class="text-xl" @submit.prevent="submitForm">
+          <!--
+          <p class="text-4xl pb-4">Order info:</p>
+          <hr class="pb-4">
+          <div class="flex">
+          <div class="text-xl w-1/3 p-4">
+            <p class="mr-10 mb-4" for="reference">Reference:</p>
+            <p class="mr-10 mb-4" for="date">Date:</p>
+            <p class="mr-10 mb-4" for="state">State:</p>
+          </div>
+          <div class="text-xl w-2/3 p-4">
+            <input class="text-left w-full mb-4" type="number" min="0" v-model="reference" required :disabled="isEditMode"/><br>
+            <input class="text-left w-full mb-4" type="date" v-model="date" required :disabled="isEditMode"/><br>
+            <input class="text-left w-full mb-4" type="text" v-model="state" readonly disabled/><br>
+          </div>
+        </div>
+      -->
+          <!-- Order info -->
+
+          
+
+          
+          <p class="text-4xl pb-4">Order info:</p>
+          <hr class="pb-6">
           <div class="flex justify-between pb-2">
-            <label class="mr-10" for="reference">Reference:</label>
-            <input class="w-30 text-right" type="number" min="0" v-model="reference" required  :disabled="isEditMode"/>
+            <label class="mr-10 font-semibold w-1/2" for="reference">Reference:</label>
+            <input class="w-full text-left w-1/2" type="number" min="0" v-model="reference" required  :disabled="isEditMode"/>
           </div>
 
           <div class="flex justify-between pb-2">
-            <label class="mr-10" for="date">Date:</label>
-            <input class="w-100" type="date" v-model="date" required :disabled="isEditMode"/>
+            <label class="mr-10 font-semibold w-1/2" for="date">Date:</label>
+            <input class="w-full text-left w-1/2" type="date" v-model="date" required :disabled="isEditMode"/>
           </div>
 
           <div class="flex justify-between pb-2">
-            <label class="mr-10" for="state">State:</label>
-            <input class="w-30 text-right" type="text" v-model="state" readonly disabled/>
+            <label class="mr-10 font-semibold w-1/2" for="state">State:</label>
+            <input class="w-full text-left w-1/2" type="text" v-model="state" readonly disabled/>
           </div>
+          
+          <!-- Order Items -->
 
-          <p class="text-2xl pt-4 pb-2">Items:</p>
-
-          <ul>
+          <p class="text-4xl pt-4 pb-2">Order Items:</p>
+          <hr class="pb-6">
+          <ul class="text-lg">
             <li class="flex justify-between p-2 mb-2 bg-base-100 rounded" v-for="(item, index) in items" :key="index">
               <div>
-                <label class="mr-4" for="itemReference">Item Reference:</label>
+                <label class="mr-4 font-semibold" for="itemReference">Item Reference:</label>
                 <input class="w-10 mr-6" type="number" min="0" v-model="item.itemReference" required />
               </div>
 
               <div>
-                <label class="mr-4" for="numberItems">Number of Items:</label>
+                <label class="mr-4 font-semibold" for="numberItems">Number of Items:</label>
                 <input class="w-10 mr-6" type="number" min="0" v-model="item.numberItems" required />
               </div>
 
-              <button class="btn btn-xs btn-error" type="button" @click="removeItem(index)">
+              <button class="btn btn-sm btn-error" type="button" @click="removeItem(index)">
                 Remove Item
               </button>
             </li>
           </ul>
 
+          <!-- Add Item Button -->
+
           <ul class="flex justify-end">
             <li>
-              <button type="button" class="btn btn-sm btn-success" @click="addItem()">
+              <button type="button" class="btn btn-sm btn-success mr-2" @click="addItem()">
                 Add Item
               </button>
             </li>
           </ul>
 
+
+          <!-- Submit Buttons -->
           <div class="flex justify-between">
             
             <button class="btn btn-primary mt-10" type="button" @click="backToOrders()">
@@ -76,6 +119,8 @@ export default {
       itemReference: 0,
       numberItems: 0,
       items: [],
+      modal_title: "",
+      modal_content: "",
       isEditMode: this.$route.params.id != undefined,
     };
   },
@@ -102,12 +147,17 @@ export default {
   },
 
   methods: {
+    showModal(title, content) {
+      this.modal_title = title;
+      this.modal_content = content;
+      this.$refs.order_modal.showModal();
+    },
     addItem() {
       this.items.push({ itemReference: 0, numberItems: 0 });
     },
     removeItem(index) {
       if (this.items.length <= 1) {
-        alert("There must be at least one item in the order.");
+        this.showModal("Error","There must be at least one item in the order.");
         return;
       }
       this.items.splice(index, 1);
@@ -116,19 +166,20 @@ export default {
       this.$router.push("/orders/");
     },
     async submitForm() {
-      //Check duplicate items and combine them
-      this.combineItems();
 
       // Validate form
       if (!this.isValidReference()) {
-        alert("Please check the form. Reference must be greater than 0.");
+        this.showModal("Error","Please check the form. Reference must be greater than 0.");
         return;
       }
 
       if (!this.isValidItems()) {
-        alert("Please check the items. For each item, item reference and number of items must be greater than 0.");
+        this.showModal("Error","Please check the items. For each item, item reference and number of items must be greater than 0.");
         return;
       }
+
+      //Check duplicate items and combine them
+      this.combineItems();
 
       // convert reference to string
       this.reference=String(this.reference);
@@ -152,12 +203,11 @@ export default {
       try {
         const result = await OrdersRepository.save(entity);
         // Save is successful
-        alert("Order #" + this.reference + " saved successfully. ");
+        this.showModal("Success","Order #" + this.reference + " saved successfully. ");
         console.log("Save successful:", result);
         this.backToOrders();
       } catch (error) {
-        // Save error
-        alert("Save failed. Please try again.");
+        this.showModal("Success","Save failed. Please try again.");
         console.error("Save failed:", error);
       }
     },
@@ -174,12 +224,12 @@ export default {
     },
 
     combineItems(){
-      let combined = false;
+      //let combined = false;
       let tmpItems = {}
       this.items.forEach((item) => {
         if(tmpItems[item.itemReference]){
           tmpItems[item.itemReference] += item.numberItems
-          combined = true;
+          //combined = true;
         }else{
           tmpItems[item.itemReference] = item.numberItems
         } 
@@ -188,9 +238,11 @@ export default {
           this.items.push({itemReference: i, numberItems: tmpItems[i]});
         }
       });
+      /*
       if(combined){
-        alert("Duplicate items found. They have been combined.");
+        this.showModal("Info","Duplicate items found. They have been combined.");
       }
+      */
     },
   },
 };
