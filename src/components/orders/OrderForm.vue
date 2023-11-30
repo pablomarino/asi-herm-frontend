@@ -163,7 +163,7 @@ export default {
       this.items.splice(index, 1);
     }, 
     backToOrders() {
-      this.$router.push("/orders/");
+      window.location.href="/orders";
     },
     async submitForm() {
 
@@ -195,7 +195,7 @@ export default {
         //id: this.id,
         reference: this.reference,
         date: this.date,
-        state: "DONE", 
+        state: "PENDING", 
         items: this.items,
       };
       
