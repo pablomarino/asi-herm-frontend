@@ -1,79 +1,110 @@
 <template>
-  <v-container>
-    <h1 class="text-center"  :style="{ fontSize: '50px' }">Order {{ $route.params.id }}</h1>
-	<ul>
-      <div className="overflow-x-auto">
-        <table className="table">
-          <thead>
-            <tr>
+  <div class="card" v-if="!loading">
+    <div class="card-body">
+      <h2 class="card-title">Order con número de referencia {{ order.reference }}</h2>
 
-                <th>Reference</th>
-				<th>Date</th>
-				<th>Price</th>
-				<th>State</th>
+      <div class="divider"/>
 
-            </tr>
-            </thead>
-            <tbody>
-			<tr>
- 
-                <td>{{ this.order.reference }}</td>
-				<td>{{ this.order.date }}</td>
-				<td>{{ this.order.price }}</td>
-				<td>{{ this.order.state }}</td>
-                
-			</tr>
-            </tbody>
-        </table>
+      <div class="row">
+        <div class="column">
+          <h2 style="font-weight: bold">Data</h2>
+        </div>
+        <div class="column">
+          <p>{{ order.date }}</p>
+        </div>
       </div>
-    </ul>
-	<hr>
-	<br>
-	<h1 class="text-center"  :style="{ fontSize: '25px' }">Items</h1>
-	<ul>
-      <div className="overflow-x-auto">
-        <table className="table">
-          <thead>
-            <tr>
 
-                <th>Reference</th>
-				<th>Quantity</th>
-
-            </tr>
-            </thead>
-            <tbody>
-			<tr v-for="(item) in order.items" :key="item.itemReference">
- 
-                <td>{{ item.itemReference }}</td>
-				<td>{{ item.numberItems }}</td>
-
-                
-			</tr>
-            </tbody>
-        </table>
+      <div class="row">
+        <div class="column">
+          <h2 style="font-weight: bold">Estado</h2>
+        </div>
+        <div class="column">
+          <p>{{ order.state }}</p>
+        </div>
       </div>
-    </ul>
-  </v-container>
+
+    </div>
+  </div>
+
+  <div class="card" v-if="!loading">
+    <div class="card-body">
+      <h2 class="card-title">Piezas incluidas en la order</h2>
+
+      <div class="divider"/>
+      <div v-for="item in items" :key="item.itemReference" class="card card-compact w-96 bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title">{{item.name}}</h2>
+
+          <div class="row">
+            <div class="column">
+              <h2 style="font-weight: bold">Referencia</h2>
+            </div>
+            <div class="column">
+              <p>{{ item.reference }}</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="column">
+              <h2 style="font-weight: bold">Descripción</h2>
+            </div>
+            <div class="column">
+              <p>{{ item.description }}</p>
+            </div>
+			</div>
+
+			<div class="row">
+            <div class="column">
+              <h2 style="font-weight: bold">Cantidad</h2>
+            </div>
+            <div class="column">
+              <p>{{ item.number}}</p>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
+
 import OrdersRepository from "@/repositories/OrdersRepository";
+import ItemsRepository from "@/repositories/ItemsRepository";
 
 export default {
   data() {
     return { 
-      order: []
+		order: [],
+		actualItem:[],
+		items: [],
     }
   },
   created() {
-    this.getOrder(this.$route.params.id);
+    this.getOrder(this.$route.params.id).then(
+	);
   },
   methods: {
-    getOrder(id) {
-      OrdersRepository.get(id)
+    async getOrder(id) {
+      await OrdersRepository.get(id)
           .then((response) => {
-            this.order = response.data;
-          });
+            this.order = response.data;})	
+		this.order.items?.map((value) => {
+		this.getActualItem(value);
+		})
     },
+	async getActualItem(element) {
+      await ItemsRepository.get(element.itemReference)
+        .then((response) => (this.actualItem=(response.data)));
+		this.actualItem.number=element.numberItems;
+		this.items.push(this.actualItem);
+		
+    },
+	getItem(id){
+		this.getActualItem(id);
+		this.items.push(this.actualItem)
+		return this.actualItem.name;
+	},
   }
 }
 </script>
