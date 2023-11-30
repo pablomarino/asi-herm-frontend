@@ -27,3 +27,7 @@
 .hr{
 	border-color: var(--fallback-bc,oklch(var(--bc)/1));
 }
+
+.displayer{
+	display: flex;
+}
