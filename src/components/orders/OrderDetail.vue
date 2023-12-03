@@ -31,41 +31,40 @@
       <h2 class="card-title">Piezas incluidas en la order</h2>
 
       <div class="divider"/>
-		<div class="displayer">
-		  <div v-for="item in items" :key="item.itemReference" class="card displayed card-compact w-96 bg-base-100 shadow-xl">
-			<div class="card-body ">
-			  <h2 class="card-title">{{item.name}}</h2>
+      <div class="displayer">
+        <div v-for="item in items" :key="item.itemReference" class="card displayed card-compact w-96 bg-base-100 shadow-xl mx-3">
+          <div class="card-body ">
+            <h2 class="card-title">{{item.name}}</h2>
 
-			  <div class="row displayed">
-				<div class="column">
-				  <h2 style="font-weight: bold">Referencia</h2>
-				</div>
-				<div class="column">
-				  <p>{{ item.reference }}</p>
-				</div>
-			  </div>
+            <div class="row displayed">
+              <div class="column">
+                <h2 style="font-weight: bold">Referencia</h2>
+              </div>
+              <div class="column">
+                <p>{{ item.reference }}</p>
+              </div>
+            </div>
 
-			  <div class="row">
-				<div class="column">
-				  <h2 style="font-weight: bold">Descripción</h2>
-				</div>
-				<div class="column">
-				  <p>{{ item.description }}</p>
-				</div>
-				</div>
+            <div class="row">
+              <div class="column">
+                <h2 style="font-weight: bold">Descripción</h2>
+              </div>
+              <div class="column">
+                <p>{{ item.description }}</p>
+              </div>
+            </div>
 
-				<div class="row">
-				<div class="column">
-				  <h2 style="font-weight: bold">Cantidad</h2>
-				</div>
-				<div class="column">
-				  <p>{{ item.number}}</p>
-				</div>
-			  </div>
-			  
-			</div>
-		  </div>
-		</div>
+            <div class="row">
+              <div class="column">
+                <h2 style="font-weight: bold">Cantidad</h2>
+              </div>
+              <div class="column">
+                <p>{{ item.number}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

@@ -24,9 +24,9 @@ export default {
     },
 
     async save(entity) {
-        if (entity.id) {
+        if (entity.reference) {
             try {
-                return (await Repository.put(`${RESOURCE_NAME}/${entity.id}`, entity)).data;
+                return (await Repository.put(`${RESOURCE_NAME}/${entity.reference}`, entity)).data;
             } catch (err) {
                 logger.error("Error updating entity", entity);
                 throw err;
