@@ -1,16 +1,16 @@
 <template>
   <v-container>
-    <h1 class="text-center"  :style="{ fontSize: '50px' }">Orders List</h1>
+    <h1 class="text-center"  :style="{ fontSize: '50px' }">Pedidos</h1>
 	<ul>
       <div className="overflow-x-auto">
         <table className="table">
           <thead>
             <tr>
 
-                <th>Reference</th>
-				<th>Date</th>
-				<th>Price</th>
-				<th>State</th>
+                <th>Nª de referencia</th>
+				<th>Fecha</th>
+				<th>Precio</th>
+				<th>Estado</th>
 
               </tr>
             </thead>

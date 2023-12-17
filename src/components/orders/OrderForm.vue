@@ -16,7 +16,7 @@
 
 
     <!-- FORM -->
-    <h1 class="text-center text-5xl p-10">Order {{ this.$route.params.id  }} Form</h1>
+    <h1 class="text-center text-5xl p-10">Formulario pedido {{ this.$route.params.id  }}</h1>
     <div class="mx-20 pt-5">
       <div class="bg-base-200 shadow-xl p-10">
         <form class="text-xl" @submit.prevent="submitForm">
@@ -41,41 +41,41 @@
           
 
           
-          <p class="text-4xl pb-4">Order info:</p>
+          <p class="text-4xl pb-4">Detalles del pedido:</p>
           <hr class="pb-6">
           <div class="flex justify-between pb-2">
-            <label class="mr-10 font-semibold w-1/2" for="reference">Reference:</label>
+            <label class="mr-10 font-semibold w-1/2" for="reference">Nº de referencia:</label>
             <input class="w-full text-left w-1/2" type="number" min="0" v-model="reference" required  :disabled="isEditMode"/>
           </div>
 
           <div class="flex justify-between pb-2">
-            <label class="mr-10 font-semibold w-1/2" for="date">Date:</label>
+            <label class="mr-10 font-semibold w-1/2" for="date">Fecha:</label>
             <input class="w-full text-left w-1/2" type="date" v-model="date" required :disabled="isEditMode"/>
           </div>
 
           <div class="flex justify-between pb-2">
-            <label class="mr-10 font-semibold w-1/2" for="state">State:</label>
+            <label class="mr-10 font-semibold w-1/2" for="state">Estado:</label>
             <input class="w-full text-left w-1/2" type="text" v-model="state" readonly disabled/>
           </div>
           
           <!-- Order Items -->
 
-          <p class="text-4xl pt-4 pb-2">Order Items:</p>
+          <p class="text-4xl pt-4 pb-2">Piezas del pedido:</p>
           <hr class="pb-6">
           <ul class="text-lg">
             <li class="flex justify-between p-2 mb-2 bg-base-100 rounded" v-for="(item, index) in items" :key="index">
               <div>
-                <label class="mr-4 font-semibold" for="itemReference">Item Reference:</label>
+                <label class="mr-4 font-semibold" for="itemReference">Nº referencia de pieza:</label>
                 <input class="w-10 mr-6" type="number" min="0" v-model="item.itemReference" required />
               </div>
 
               <div>
-                <label class="mr-4 font-semibold" for="numberItems">Number of Items:</label>
+                <label class="mr-4 font-semibold" for="numberItems">Nº de pieza:</label>
                 <input class="w-10 mr-6" type="number" min="0" v-model="item.numberItems" required />
               </div>
 
               <button class="btn btn-sm btn-error" type="button" @click="removeItem(index)">
-                Remove Item
+                Eliminar pieza
               </button>
             </li>
           </ul>
@@ -85,7 +85,7 @@
           <ul class="flex justify-end">
             <li>
               <button type="button" class="btn btn-sm btn-success mr-2" @click="addItem()">
-                Add Item
+                Añadir pieza
               </button>
             </li>
           </ul>
@@ -95,9 +95,9 @@
           <div class="flex justify-between">
             
             <button class="btn btn-primary mt-10" type="button" @click="backToOrders()">
-              Cancel
+              Cancelar
             </button>
-            <button class="btn btn-primary mt-10" type="submit">Submit</button>
+            <button class="btn btn-primary mt-10" type="submit">Crear</button>
           </div>
         </form>
       </div>

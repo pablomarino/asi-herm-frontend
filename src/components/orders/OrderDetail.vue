@@ -1,13 +1,13 @@
 <template>
   <div class="card" v-if="!loading">
     <div class="card-body">
-      <h2 class="card-title">Order con número de referencia {{ order.reference }}</h2>
+      <h2 class="card-title">Pedido con número de referencia {{ order.reference }}</h2>
 
       <div class="divider"/>
 
       <div class="row">
         <div class="column">
-          <h2 style="font-weight: bold">Data</h2>
+          <h2 style="font-weight: bold">Fecha</h2>
         </div>
         <div class="column">
           <p>{{ order.date }}</p>
@@ -28,7 +28,7 @@
 
   <div class="card" v-if="!loading">
     <div class="card-body">
-      <h2 class="card-title">Piezas incluidas en la order</h2>
+      <h2 class="card-title">Piezas incluidas en el pedido</h2>
 
       <div class="divider"/>
       <div class="displayer">
@@ -38,7 +38,7 @@
 
             <div class="row displayed">
               <div class="column">
-                <h2 style="font-weight: bold">Referencia</h2>
+                <h2 style="font-weight: bold">Nº de Referencia</h2>
               </div>
               <div class="column">
                 <p>{{ item.reference }}</p>

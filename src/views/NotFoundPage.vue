@@ -1,5 +1,5 @@
 <template>
   <v-container>
-    <h1 class="text-center">404 Not found. The page you are looking for does not exist.</h1>
+    <h1 class="text-center">Error 404. La página solicitada no existe.</h1>
   </v-container>
 </template>

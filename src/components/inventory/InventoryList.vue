@@ -1,17 +1,17 @@
 <template>
   <v-container>
-    <h1 class="text-center" :style="{ fontSize: '50px' }">Inventory List</h1>
+    <h1 class="text-center" :style="{ fontSize: '50px' }">Inventario</h1>
     <ul>
       <div className="overflow-x-auto">
         <table className="table">
           <thead>
             <tr>
-                <th>Name</th>
-                <th>Reference</th>
-                <th>Description</th>
-                <th>Purchase price</th>
-                <th>Sale price</th>
-                <th>Total items</th>
+                <th>Nombre</th>
+                <th>Nº de referencia</th>
+                <th>Descripción</th>
+                <th>Precio de compra</th>
+                <th>Precio de venta</th>
+                <th>Nº total de piezas</th>
               </tr>
             </thead>
             <tbody>
