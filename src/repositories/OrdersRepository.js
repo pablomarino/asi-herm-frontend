@@ -23,6 +23,15 @@ export default {
         }
     },
 
+    async create(entity) {
+        try {
+            return (await Repository.post(`${RESOURCE_NAME}`, entity)).data;
+        } catch (err) {
+            logger.error("Error saving entity", entity);
+            throw err;
+        }
+    },
+
     async save(entity) {
         if (entity.reference) {
             try {

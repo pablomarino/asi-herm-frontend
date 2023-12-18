@@ -201,7 +201,7 @@ export default {
       
       // Submit
       try {
-        const result = await OrdersRepository.save(entity);
+        const result = await OrdersRepository.create(entity);
         // Save is successful
         this.showModal("Success","Order #" + this.reference + " saved successfully. ");
         console.log("Save successful:", result);
