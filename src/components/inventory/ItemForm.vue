@@ -110,7 +110,9 @@ export default {
     getBoxes() {
       this.loading = true;
       const options = {
-        referenceItem: this.item.id,
+        params: {
+          itemReference: this.item.reference,
+        }
       }
       return BoxesRepository.getAll(options)
           .then((response) => (this.boxes = response.data))
